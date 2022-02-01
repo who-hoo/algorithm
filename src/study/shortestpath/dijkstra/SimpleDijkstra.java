@@ -22,11 +22,9 @@ public class SimpleDijkstra {
 
     public final static Scanner sc = new Scanner(System.in);
     public final static int INF = (int) 1e9;
-    public final static int TO = 0;
-    public final static int COST = 1;
 
     public static int n, m, start;
-    public static List<List<List<Integer>>> graph;
+    public static ArrayList<ArrayList<Node>> graph;
     public static boolean[] visited;
     public static int[] distance;
 
@@ -35,7 +33,7 @@ public class SimpleDijkstra {
             int from = sc.nextInt();
             int to = sc.nextInt();
             int cost = sc.nextInt();
-            graph.get(from).add(List.of(to, cost));
+            graph.get(from).add(new Node(to, cost));
         }
         sc.close();
     }
@@ -43,7 +41,7 @@ public class SimpleDijkstra {
     public static int getSmallestNode() {
         int min = INF;
         int idx = 0;
-        for (int i = 1; i < distance.length; i++) {
+        for (int i = 1; i <= n; i++) {
             if (distance[i] < min && !visited[i]) {
                 min = distance[i];
                 idx = i;
@@ -56,8 +54,8 @@ public class SimpleDijkstra {
         // 시작 노드 초기화
         distance[start] = 0;
         visited[start] = true;
-        for (List<Integer> info : graph.get(start)) {
-            distance[info.get(TO)] = info.get(COST);
+        for (Node node : graph.get(start)) {
+            distance[node.getIndex()] = node.getDistance();
         }
 
         // 시작 노드를 제외한 전체 n - 1개의 노드에 대해 반복
@@ -67,10 +65,10 @@ public class SimpleDijkstra {
             visited[now] = true;
 
             // 현재 노드와 연결된 다른 노드를 확인
-            for (List<Integer> info : graph.get(now)) {
-                int cost = distance[now] + info.get(COST);
-                if (cost < distance[info.get(TO)]) { // 현재 노드를 거쳐서 다른 노드로 이동하는 거리가 더 짧은 경우
-                    distance[info.get(TO)] = cost;
+            for (Node node : graph.get(now)) {
+                int cost = distance[now] + node.getDistance();
+                if (cost < distance[node.getIndex()]) { // 현재 노드를 거쳐서 다른 노드로 이동하는 거리가 더 짧은 경우
+                    distance[node.getIndex()] = cost;
                 }
             }
         }
@@ -88,9 +86,8 @@ public class SimpleDijkstra {
         }
         visited = new boolean[n + 1];
         distance = new int[n + 1];
-        for (int d : distance) {
-            d = INF;
-        }
+        Arrays.fill(distance, INF);
+
         getAllNodeInfo();
         dijkstra(start);
 
