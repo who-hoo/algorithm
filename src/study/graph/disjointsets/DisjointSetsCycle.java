@@ -1,4 +1,4 @@
-package study.graph;
+package study.graph.disjointsets;
 
 import java.util.Scanner;
 
