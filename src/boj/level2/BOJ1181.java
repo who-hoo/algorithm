@@ -13,67 +13,32 @@ package boj.level2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.Arrays;
 
 public class BOJ1181 {
-
-    static class Word implements Comparable<Word> {
-
-        String w;
-
-        Word(String w) {
-            this.w = w;
-        }
-
-        @Override
-        public int compareTo(Word o) {
-            if (this.w.length() != o.w.length()) {
-                return this.w.length() - o.w.length();
-            } else {
-                return this.w.compareTo(o.w);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return w;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Word word = (Word) o;
-            return Objects.equals(w, word.w);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(w);
-        }
-    }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        HashSet<Word> words = new HashSet<>();
+        String[] words = new String[n];
         for (int i = 0; i < n; i++) {
-            words.add(new Word(br.readLine()));
+            words[i] = br.readLine();
         }
         br.close();
 
-        ArrayList<Word> wordList = new ArrayList(words);
-        Collections.sort(wordList);
+        Arrays.sort(words, (o1, o2) -> {
+            if (o1.length() != o2.length()) {
+                return o1.length() - o2.length();
+            }
+            return o1.compareTo(o2);
+        });
 
-        for (Word word : wordList) {
-            System.out.println(word);
+        System.out.println(words[0]);
+        for (int i = 1; i < words.length; i++) {
+            if (words[i - 1].equals(words[i])) {
+                continue;
+            }
+            System.out.println(words[i]);
         }
     }
 }
