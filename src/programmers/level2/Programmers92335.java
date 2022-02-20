@@ -19,17 +19,6 @@ public class Programmers92335 {
         System.out.println(sol.solution(n, k));
     }
 
-    public String convert(int n, int k) {
-        StringBuilder sb = new StringBuilder();
-        while (n >= k) {
-            sb.append(n % k);
-            n = n / k;
-        }
-        sb.append(n);
-        sb.reverse();
-        return sb.toString();
-    }
-
     public boolean isPrime(String number) {
         long n = Long.parseLong(number);
         if (n == 1) {
@@ -44,7 +33,7 @@ public class Programmers92335 {
     }
 
     public int solution(int n, int k) {
-        String converted = convert(n, k);
+        String converted = Integer.toString(n, k);
         int answer = 0;
         for (String number : converted.split("0")) {
             if (!number.isEmpty() && isPrime(number)) {
