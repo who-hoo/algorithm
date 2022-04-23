@@ -1,5 +1,15 @@
 package boj.level2;
 
+/*
+    문제    : BOJ 나무 자르기
+    유형    : 이분 탐색, 매개 변수 탐색
+	난이도   : Hard (Silver3)
+	시간    : 2h
+	uri    : https://www.acmicpc.net/problem/2805
+    날짜    : 22.04.19(o)
+    refer  :
+*/
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,47 +17,53 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.StringTokenizer;
 
+/**
+ * (최적화) M미터를 구할 수 있는 절단기의 최대 높이
+ * (결정) 절단기가 h일 때 절단된 나무가 M미터 이상인가 아닌가
+ */
 public class BOJ2805 {
 
-    static int n, m;
-    static ArrayList<Integer> trees;
+    static long n, m;
+    static ArrayList<Long> trees;
 
-    static int binarySearch(int start, int end) {
-        int mid = (start + end) / 2;
-        int sum = cut(mid);
-        if (sum > m) {
-            return binarySearch(mid+1, end);
-        } else if (sum == m) {
-            return mid;
-        } else {
-            return binarySearch(start, mid-1);
+    static long binarySearch(long start, long end) {
+        long answer = 0;
+        while (start <= end) {
+            long mid = (start + end) / 2;
+            if (determination(mid)) {
+                answer = mid;
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
         }
+        return answer;
     }
 
-    static int cut(int h) {
-        return trees.stream().filter(t -> t > h)
+    static boolean determination(long h) {
+        long sum = trees.stream().filter(t -> t > h)
             .map(t -> t - h)
-            .mapToInt(Integer::intValue)
+            .mapToLong(Long::longValue)
             .sum();
+        return sum >= m;
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken()); // 나무의 수
-        m = Integer.parseInt(st.nextToken()); // 집으로 가져가려는 나무의 길이
+        n = Long.parseLong(st.nextToken()); // 나무의 수
+        m = Long.parseLong(st.nextToken()); // 집으로 가져가려는 나무의 길이
 
         st = new StringTokenizer(br.readLine());
-        trees = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            Integer tree = Integer.valueOf(st.nextToken());
+        trees = new ArrayList<>((int) n);
+        for (long i = 0; i < n; i++) {
+            Long tree = Long.valueOf(st.nextToken());
             trees.add(tree);
         }
         br.close();
 
         Collections.sort(trees);
-        int answer = binarySearch(0, trees.get(n-1));
-        System.out.println(answer);
+        System.out.println(binarySearch(0, trees.get((int) (n - 1))));
     }
 }
