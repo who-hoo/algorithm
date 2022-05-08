@@ -1,5 +1,15 @@
 package programmers.level2;
 
+/*
+    문제    : 프로그래머스 문자열 압축
+    유형    :
+	난이도   : Hard (Level 2)
+	시간    : 3h
+	uri    : https://programmers.co.kr/learn/courses/30/lessons/60057
+    날짜    : 22.05.04(o)
+    refer  :
+*/
+
 public class Programmers60057 {
 
     public String compress(String s, int unit) {
@@ -21,6 +31,11 @@ public class Programmers60057 {
                     prev = current;
                 }
             } catch (IndexOutOfBoundsException e) {
+                if (cnt == 1) {
+                    result.append(prev);
+                } else {
+                    result.append(cnt).append(prev);
+                }
                 result.append(s.substring(i));
                 cnt = 1;
                 prev = "";
@@ -30,9 +45,6 @@ public class Programmers60057 {
             result.append(prev);
         } else {
             result.append(cnt).append(prev);
-        }
-        if (s.length() % unit > 0) {
-            result.append(s.substring(s.length() - unit));
         }
         return result.toString();
     }
@@ -60,7 +72,14 @@ public class Programmers60057 {
             "a",
             "abcabcdededededede",
             "xztjabcdabcd",
-            "acdhdh"
+            "acdhdh",
+            "abcabcdede", //8
+            "werwerwsdgsdfsdfsdf", //15 -> 14
+            "abcdabcd", //5
+            "ab", //2
+            "aaaccc", //4
+            "aabbaccc", //7
+            "ababcdcdababcdcd" //9
         };
         for (String input : inputs) {
             System.out.println(sol.solution(input));
