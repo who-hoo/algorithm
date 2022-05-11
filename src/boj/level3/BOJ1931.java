@@ -1,11 +1,20 @@
 package boj.level3;
 
+/*
+    문제    : BOJ 회의실 배정
+    유형    : 그리디, 정렬
+	난이도   : Hard (Silver1)
+	시간    : 2h 30m
+	uri    : https://www.acmicpc.net/problem/1931
+    날짜    : 22.05.11(o)
+    refer  :
+*/
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 
 public class BOJ1931 {
 
@@ -13,19 +22,17 @@ public class BOJ1931 {
 
         int start;
         int end;
-        int duration;
 
         public Conference(int start, int end) {
             this.start = start;
             this.end = end;
-            this.duration = end - start;
         }
 
         @Override
         public int compareTo(Conference o) {
-            if (this.duration < o.duration) {
+            if (this.end < o.end) {
                 return -1;
-            } else if (this.duration == o.duration) {
+            } else if (this.end == o.end) {
                 return Integer.compare(this.start, o.start);
             } else {
                 return 1;
@@ -37,12 +44,9 @@ public class BOJ1931 {
             return "Conference{" +
                 "start=" + start +
                 ", end=" + end +
-                ", duration=" + duration +
                 '}';
         }
     }
-
-    static HashSet<Integer> reservationTable = new HashSet<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -59,29 +63,14 @@ public class BOJ1931 {
         Collections.sort(conferences);
 
         int answer = 0;
+        int time = 0;
         for (Conference conference : conferences) {
-            if (canReserve(conference)) {
-                System.out.println(conference);
-                reserve(conference);
+            if (conference.start >= time) {
                 answer++;
+                time = conference.end;
             }
         }
 
         System.out.println(answer);
-    }
-
-    private static boolean canReserve(Conference conference) {
-        for (int i = conference.start; i < conference.end; i++) {
-            if (reservationTable.contains(i)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static void reserve(Conference conference) {
-        for (int i = conference.start; i < conference.end; i++) {
-            reservationTable.add(i);
-        }
     }
 }
