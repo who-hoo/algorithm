@@ -1,16 +1,27 @@
 package boj.level2;
 
+/*
+    문제    : BOJ 프린터 큐
+    유형    : 구현, 자료 구조, 시뮬레이션, 큐
+	난이도   : Easy (Silver3)
+	시간    : 30m
+	uri    : https://www.acmicpc.net/problem/1966
+    날짜    : 22.05.16(o)
+    refer  :
+*/
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class BOJ1966 {
 
-    static class Document implements Comparable<Document> {
+    static class Document {
 
         int id;
         int priority;
@@ -18,17 +29,6 @@ public class BOJ1966 {
         public Document(int id, int priority) {
             this.id = id;
             this.priority = priority;
-        }
-
-        @Override
-        public int compareTo(Document o) {
-            if (this.priority > o.priority) {
-                return -1;
-            } else if (this.priority < o.priority) {
-                return 1;
-            } else {
-                return 0;
-            }
         }
     }
 
@@ -41,18 +41,23 @@ public class BOJ1966 {
             int N = Integer.parseInt(st.nextToken()); // 문서의 개수
             int targetID = Integer.parseInt(st.nextToken()); // 몇 번째로 인쇄되었는지 궁금한 문서
 
-            PriorityQueue<Document> pq = new PriorityQueue<>();
+            Queue<Document> queue = new LinkedList();
             st = new StringTokenizer(br.readLine());
             for (int i = 0; i < N; i++) {
-                pq.offer(new Document(i, Integer.parseInt(st.nextToken())));
+                queue.offer(new Document(i, Integer.parseInt(st.nextToken())));
             }
 
-            int answer = 1;
-            while (!pq.isEmpty()) {
-                if (targetID == pq.poll().id) {
-                    break;
+            int answer = 0;
+            while (!queue.isEmpty()) {
+                int currentPriority = queue.peek().priority;
+                if (queue.stream().anyMatch(d -> d.priority > currentPriority)) {
+                    queue.offer(queue.poll());
+                } else {
+                    answer++;
+                    if (targetID == queue.poll().id) {
+                        break;
+                    }
                 }
-                answer++;
             }
             bw.write(answer + "\n");
         }
