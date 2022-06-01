@@ -1,5 +1,15 @@
 package programmers.level2;
 
+/*
+    문제    : 프로그래머스 다리를 지나는 트럭
+    유형    : 스택/큐
+	난이도   : SoSo (Level 2)
+	시간    : 1h 30m
+	uri    : https://programmers.co.kr/learn/courses/30/lessons/42583
+    날짜    : 22.06.01(o)
+    refer  :
+*/
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,10 +53,7 @@ public class Programmers42583 {
 			} else {
 				bridge.offer(0);
 			}
-			System.out.println("answer = " + answer);
-			System.out.println("bridge = " + bridge);
-			System.out.println("waitingQueue = " + waitingQueue);
-			if (waitingQueue.isEmpty() && bridge.isEmpty()) {
+			if (waitingQueue.isEmpty() && bridge.stream().noneMatch(b -> b != 0)) {
 				break;
 			}
 		}
