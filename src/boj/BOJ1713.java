@@ -1,5 +1,15 @@
 package boj;
 
+/*
+    문제    : BOJ 후보 추천하기
+    유형    : 구현, 시뮬레이션
+	난이도   : SoSo (Silver2)
+	시간    : 1h
+	uri    : https://www.acmicpc.net/problem/1713
+    날짜    : 22.06.12(o)
+    refer  :
+*/
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -42,13 +52,7 @@ public class BOJ1713 {
 
 		@Override
 		public int compareTo(Candidate o) {
-			if (this.recommendedCount > o.recommendedCount) {
-				return -1;
-			} else if (this.recommendedCount == o.recommendedCount) {
-				return this.sequence - o.sequence;
-			} else {
-				return 1;
-			}
+			return Integer.compare(this.n, o.n);
 		}
 	}
 
@@ -69,8 +73,7 @@ public class BOJ1713 {
 				if (list.size() < N) {
 					list.add(candidate);
 				} else {
-					Collections.sort(list,
-						(o1, o2) -> {
+					list.sort((o1, o2) -> {
 						if (o1.recommendedCount > o2.recommendedCount) {
 							return -1;
 						} else if (o1.recommendedCount == o2.recommendedCount) {
