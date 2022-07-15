@@ -6,7 +6,7 @@ package boj.level3;
 	난이도   : SoSo (Silver2)
 	시간    : 40m
 	uri    : https://www.acmicpc.net/problem/1541
-    refer  :
+    refer  : https://st-lab.tistory.com/148
 */
 
 import java.io.BufferedReader;
@@ -14,10 +14,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class BOJ1541 {
 
@@ -25,46 +22,24 @@ public class BOJ1541 {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
 
-		char[] input = in.readLine().toCharArray();
+		int answer = Integer.MAX_VALUE;
 
-		// 1. 입력값을 각 숫자, 연산자로 분리하여 List<String> expressions에 저장
-		List<String> expressions = new ArrayList<>();
-		StringBuilder sb = new StringBuilder();
-		for (char c : input) {
-			if ('0' <= c && c <= '9') {
-				sb.append(c);
+		// 1. 뺄셈을 기준으로 1차적으로 문자열을 분리
+		String[] splitByMinus = in.readLine().split("-");
+
+		// 2. 분리된 문자열들 각각에 포함된 정수 값들을 모두 더해준 후, 각각 더해진 값들을 빼준다.
+		for (String expression : splitByMinus) {
+			// 2-1. 분리된 문자열들 각각에 포함된 정수 값들을 모두 더해준 후,
+			int current = 0;
+			StringTokenizer st = new StringTokenizer(expression, "+");
+			while (st.hasMoreTokens()) {
+				current += Integer.parseInt(st.nextToken());
+			}
+			// 2-2. 각각 더해진 값들을 빼준다.
+			if (answer == Integer.MAX_VALUE) { // 첫번째 수는 양수임에 주의, sum이 초기값(MAX_VALUE)라면 빼는 것이 아니라 첫번재 토큰으로 변경
+				answer = current;
 			} else {
-				expressions.add(sb.toString());
-				expressions.add(String.valueOf(c));
-				sb = new StringBuilder();
-			}
-		}
-		expressions.add(sb.toString());
-
-		// 2. 뺄셈 연산자 다음에 오는 숫자를 최대한 크게 만들기 위해, 뺄셈 연산자 인덱스 추출하여 minusIdxQueue에 저장
-		Queue<Integer> minusIdxQueue = new LinkedList<>();
-		for (int i = 0; i < expressions.size(); i++) {
-			if (expressions.get(i).equals("-")) {
-				minusIdxQueue.offer(i);
-			}
-		}
-
-		// 3. 뺄셈 연산자 사이에 있는 덧셈을 모두 뺄셈으로 바꾸어 연산 수행(괄호를 쳤다고 생각)
-		int answer = 0;
-		boolean[] visited = new boolean[expressions.size()];
-		while (!minusIdxQueue.isEmpty()) {
-			int minusIdx = minusIdxQueue.poll();
-			int nextMinusIdx = (minusIdxQueue.isEmpty() ? expressions.size() : minusIdxQueue.peek());
-			for (int i = minusIdx + 1; i < nextMinusIdx; i += 2) {
-				answer -= Integer.parseInt(expressions.get(i));
-				visited[i] = true;
-			}
-		}
-
-		// 4. 괄호를 쳤다고 생각하고 먼저 연산하고 남은 나머지 덧셈 연산 수행
-		for (int i = 0; i < expressions.size(); i+=2) {
-			if (!visited[i]) {
-				answer += Integer.parseInt(expressions.get(i));
+				answer -= current;
 			}
 		}
 		out.write(String.valueOf(answer));
