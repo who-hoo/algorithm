@@ -1,12 +1,19 @@
 package boj;
 
+/*
+    문제    : BOJ 스타트와 링크
+    유형    : 브루트포스 알고리즘, 백트래킹
+	난이도   : Hard (Silver2)
+	시간    : 3h
+	uri    : https://www.acmicpc.net/problem/14889
+    refer  :
+*/
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class BOJ14889 {
@@ -29,7 +36,7 @@ public class BOJ14889 {
 
 		for (int i = 0; i < N; i++) {
 			boolean[] startTeam = new boolean[N];
-			select(startTeam, i);
+			select(startTeam, i, 0);
 		}
 		out.write(String.valueOf(answer));
 
@@ -37,48 +44,33 @@ public class BOJ14889 {
 		in.close();
 	}
 
-	public static void select(boolean[] starkTeam, int n) {
-		if (endCondition(starkTeam)) {
-			updateAnswer(starkTeam);
+	public static void select(boolean[] startTeam, int n, int startTeamCount) {
+		if (startTeamCount == startTeam.length / 2) {
+			updateAnswer(startTeam);
+			return;
 		}
-		starkTeam[n] = true;
-		for (int i = 0; i < starkTeam.length; i++) {
-			if (!starkTeam[i]) {
-				select(starkTeam, i);
+		startTeam[n] = true;
+		for (int i = n + 1; i < startTeam.length; i++) {
+			if (!startTeam[i]) {
+				select(startTeam, i, startTeamCount + 1);
 			}
 		}
-		starkTeam[n] = false;
+		startTeam[n] = false;
 	}
 
-	public static boolean endCondition(boolean[] starkTeam) {
-		int cnt = 0;
-		for (boolean st : starkTeam) {
-			if (st) {
-				cnt++;
-			}
-		}
-		return cnt == (starkTeam.length / 2);
-	}
-
-	public static void updateAnswer(boolean[] starkTeam) {
-		List<Integer> starkTeamMember = new ArrayList<>(starkTeam.length / 2);
-		List<Integer> linkTeamMember = new ArrayList<>(starkTeam.length / 2);
-		for (int i = 0; i < starkTeam.length; i++) {
-			if (starkTeam[i]) {
-				starkTeamMember.add(i);
-				continue;
-			}
-			linkTeamMember.add(i);
-		}
-
-		int starkTeamStat = 0;
+	public static void updateAnswer(boolean[] startTeam) {
+		int startTeamStat = 0;
 		int linkTeamStat = 0;
-		for (int i = 0; i < starkTeamMember.size(); i++) {
-			for (int j = 0; j < starkTeamMember.size(); j++) {
-				starkTeamStat += stat[starkTeamMember.get(i)][starkTeamMember.get(j)];
-				linkTeamStat += stat[linkTeamMember.get(i)][linkTeamMember.get(j)];
+		for (int i = 0; i < startTeam.length; i++) {
+			for (int j = i; j < startTeam.length; j++) {
+				if (startTeam[i] && startTeam[j]) {
+					startTeamStat += (stat[i][j] + stat[j][i]);
+				}
+				if (!startTeam[i] && !startTeam[j]) {
+					linkTeamStat += (stat[i][j] + stat[j][i]);
+				}
 			}
 		}
-		answer = Math.min(answer, Math.abs(starkTeamStat - linkTeamStat));
+		answer = Math.min(answer, Math.abs(startTeamStat - linkTeamStat));
 	}
 }
