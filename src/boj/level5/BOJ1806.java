@@ -1,5 +1,14 @@
 package boj.level5;
 
+/*
+    문제    : BOJ 부분합
+    유형    : 누적 합, 두 포인터
+	난이도   : Hard (Gold4)
+	시간    : 1h
+	uri    : https://www.acmicpc.net/problem/1806
+    refer  : https://www.youtube.com/watch?v=rI8NRQsAS_s
+*/
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,15 +31,16 @@ public class BOJ1806 {
 		in.close();
 
 		int answer = Integer.MAX_VALUE;
-		for (int startIdx = 1; startIdx <= N; startIdx++) {
-			for (int endIdx = startIdx; endIdx <= N; endIdx++) {
-				int sum = prefixSum[endIdx] - prefixSum[startIdx - 1];
-				if (sum >= S) {
-					answer = Math.min(answer, endIdx - startIdx +1);
-				}
+		int start = 1;
+		int end = 1;
+		while (end <= N) {
+			if (prefixSum[end] - prefixSum[start - 1] >= S) {
+				answer = Math.min(answer, end - start + 1);
+				start++;
+			} else {
+				end++;
 			}
 		}
-
 		System.out.println((answer == Integer.MAX_VALUE) ? 0 : answer);
 	}
 }
