@@ -1,5 +1,14 @@
 package boj.level3;
 
+/*
+    문제    : BOJ Z
+    유형    : 분할 정복, 재귀
+	난이도   : SoSo (Silver1)
+	시간    : 1h 30m
+	uri    : https://www.acmicpc.net/problem/1074
+    refer  : https://github.com/who-hoo/algorithm-study/pull/424
+*/
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,12 +39,38 @@ public class BOJ1074 {
         }
 
         // N > 1인 경우, 배열을 크기가 2^(N-1) * 2^(N-1)로 4등분 한 후에 재귀적으로 순서대로 방문한다.
+        int countOfSector = (int) Math.pow(2, n - 1) * (int) Math.pow(2, n - 1);
         int middleRow = (firstRow + lastRow) / 2;
         int middleCol = (firstCol + lastCol) / 2;
-        explore(n - 1, firstRow, middleRow, firstCol, middleCol); // 왼쪽 위
-        explore(n - 1, firstRow, middleRow, middleCol, lastCol); // 오른쪽 위
-        explore(n - 1, middleRow, lastRow, firstCol, middleCol); // 왼쪽 아래
-        explore(n - 1, middleRow, lastRow, middleCol, lastCol); // 오른쪽 아래
+
+        // 왼쪽 위
+        if (firstRow <= r && r < middleRow &&
+            firstCol <= c && c < middleCol) { // 찾고자 하는 지점(r,c)이 속하지 않은 격자들은 재귀 호출하지 않는다.
+            explore(n - 1, firstRow, middleRow, firstCol, middleCol);
+        } else { // 단, 재귀 호출을 하지 않더라도 순서는 격자의 크기만큼 더해준다.
+            sequence += countOfSector;
+        }
+        // 오른쪽 위
+        if (firstRow <= r && r < middleRow &&
+            middleCol <= c && c < lastCol) { // 찾고자 하는 지점(r,c)이 속하지 않은 격자들은 재귀 호출하지 않는다.
+            explore(n - 1, firstRow, middleRow, middleCol, lastCol);
+        } else { // 단, 재귀 호출을 하지 않더라도 순서는 격자의 크기만큼 더해준다.
+            sequence += countOfSector;
+        }
+        // 왼쪽 아래
+        if (middleRow <= r && r < lastRow &&
+            firstCol <= c && c < middleCol) { // 찾고자 하는 지점(r,c)이 속하지 않은 격자들은 재귀 호출하지 않는다.
+            explore(n - 1, middleRow, lastRow, firstCol, middleCol);
+        } else { // 단, 재귀 호출을 하지 않더라도 순서는 격자의 크기만큼 더해준다.
+            sequence += countOfSector;
+        }
+        // 오른쪽 아래
+        if (middleRow <= r && r < lastRow &&
+            middleCol <= c && c < lastCol) { // 찾고자 하는 지점(r,c)이 속하지 않은 격자들은 재귀 호출하지 않는다.
+            explore(n - 1, middleRow, lastRow, middleCol, lastCol);
+        } else { // 단, 재귀 호출을 하지 않더라도 순서는 격자의 크기만큼 더해준다.
+            sequence += countOfSector;
+        }
     }
 
     private static void visit(int firstRow, int lastRow, int firstCol, int lastCol) {
