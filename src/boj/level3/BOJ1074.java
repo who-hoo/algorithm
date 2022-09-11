@@ -7,21 +7,19 @@ import java.util.StringTokenizer;
 
 public class BOJ1074 {
 
-    private static int[][] array;
+    private static int r;
+    private static int c;
     private static int sequence = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer tokenizer = new StringTokenizer(in.readLine());
         final int N = Integer.parseInt(tokenizer.nextToken());
-        final int r = Integer.parseInt(tokenizer.nextToken());
-        final int c = Integer.parseInt(tokenizer.nextToken());
+        r = Integer.parseInt(tokenizer.nextToken());
+        c = Integer.parseInt(tokenizer.nextToken());
         int arraySize = (int) Math.pow(2, N);
-        array = new int[arraySize][arraySize];
 
         explore(N, 0, arraySize, 0, arraySize);
-
-        System.out.println(array[r][c]);
     }
 
     private static void explore(int n, int firstRow, int lastRow, int firstCol, int lastCol) {
@@ -43,7 +41,11 @@ public class BOJ1074 {
     private static void visit(int firstRow, int lastRow, int firstCol, int lastCol) {
         for (int row = firstRow; row < lastRow; row++) {
             for (int col = firstCol; col < lastCol; col++) {
-                array[row][col] = sequence++;
+                if (row == r && col == c) {
+                    System.out.println(sequence);
+                    System.exit(0);
+                }
+                sequence++;
             }
         }
     }
