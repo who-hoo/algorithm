@@ -1,11 +1,11 @@
 package programmers.level2;
 
 /*
-    문제    : 프로그래머스 부분합
+    문제    : 프로그래머스 배달
     유형    : 다익스트라
 	난이도   : SoSo (Level 2)
 	시간    : 1h
-	uri    : https://school.programmers.co.kr/learn/courses/30/lessons/17677?language=java
+	uri    : https://school.programmers.co.kr/learn/courses/30/lessons/12978
     refer  :
 */
 
